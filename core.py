@@ -10,7 +10,7 @@ class StudyBuddy:
     def __init__(self, data_file='user_login_details.json'):
         self.user_data = UserData(data_file)
         self.current_user_email = None
-        self.hours_per_difficulty = 2  # Assumption: 1 difficulty = 2 hours total work
+        self.hours_per_difficulty = 2
 
     def signup(self):
         clear_screen()
@@ -134,7 +134,7 @@ class StudyBuddy:
 
         current_hours = tasks[task_index].get('hours_studied', 0)
         hours = input_hours(f"🔥 Enter hours studied to add (current: {current_hours}): ")
-        new_hours = current_hours + hours  # Accumulate hours
+        new_hours = current_hours + hours
         self.user_data.update_task_progress(self.current_user_email, task_index, new_hours)
         total_hours = tasks[task_index]['difficulty'] * self.hours_per_difficulty
         print_progress_bar(new_hours, total_hours)
@@ -185,9 +185,8 @@ class StudyBuddy:
             deadline_date = datetime.strptime(details['deadline'], '%Y-%m-%d')
             days_left = (deadline_date - today).days
             if days_left < 0:
-                continue  # Skip past-due tasks
+                continue
 
-            # Choose color based on urgency
             if days_left < 3:
                 color = 'red'
             elif days_left < 7:
@@ -205,7 +204,6 @@ class StudyBuddy:
                     time_display = f"{hours:.1f} hrs"
                 print(f"  {date}: {time_display}")
 
-        # Optional: Milestone if user already met their goals
         tasks = self.user_data.get_tasks(self.current_user_email)
         goal_met = all(task.get('hours_studied', 0) >= task['difficulty'] * self.hours_per_difficulty for task in tasks)
         if goal_met:
@@ -246,7 +244,7 @@ class StudyBuddy:
             try:
                 deadline = datetime.strptime(deadline_str, "%Y-%m-%d")
             except:
-                continue  # skip if invalid date
+                continue
 
             days_left = max((deadline - today).days + 1, 1)
 
@@ -269,7 +267,7 @@ class StudyBuddy:
                     c.showPage()
                     y = height - 50
 
-            y -= 10  # space after subject
+            y -= 10
 
         c.save()
         print_colored(f"💪 Study plan exported as {filename}", "green")

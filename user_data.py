@@ -10,11 +10,9 @@ class UserData:
         if os.path.exists(self.filename):
             with open(self.filename, 'r') as f:
                 self.data = json.load(f)
-                # Migrate existing tasks to use hours_studied
                 for user in self.data['users'].values():
                     for task in user.get('tasks', []):
                         if 'progress' in task:
-                            # Convert existing progress to hours (e.g., 100% = 10 hours)
                             task['hours_studied'] = task.pop('progress', 0) / 10.0
         else:
             self.data = {"users": {}}
